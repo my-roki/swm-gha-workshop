@@ -1,40 +1,37 @@
 name: "SWM GitHub Actions Basic"
 
-# on: ["push", "pull-request"]
-on:
-  push:
-    # 특정 브랜치에서 이벤트 발생시 actions 동작
-    branches:
-      - "main"
-    # 특정 디렉토리에서 이벤트 발생시 actions 동작
-    path:
-      - "src/**"
-      - "test/**"
+on: push
 
 jobs:
   first-job:
     name: "First Job"
+    # 각각의 matrix마다 job이 돌아갑니다.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say Hello World
+        shell: bash
+        run: |
+          echo "Hello World"
 
   second-job:
-    if: github.event == 'pull_request'
     name: "Second Job"
-
-    strategy:
-      matrix:
-        os: ["windows-latest", "macos-latest", "ubuntu-latest"]
-        nodejs: ["16.x", "18.x"]
-
-    # 각각의 matrix마다 job이 돌아갑니다.
-    runs-on: ${{ matrix.os }}
-
+    needs:
+      - "first-job"
+    runs-on: ubuntu-latest
     steps:
-      - name: Say Hello World on ${{ matrix.os }}
+      - name: Say Hello World
         shell: bash
         run: |
-          echo "Hello World on ${{ matrix.os }} with ${{ matrix.nodejs }}"
+          echo "Hello World"
 
-      - name: Say Hello World on ${{ matrix.os }}
-        if: matrix.os == 'ubuntu-latest'
+  third-job:
+    name: "Third Job"
+    needs:
+      - "first-job"
+      - "second-job"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say Hello World
         shell: bash
         run: |
-          echo "Hello World on ${{ matrix.os }} with ${{ matrix.nodejs }}"
+          echo "Hello World"
