@@ -45,3 +45,24 @@ jobs:
           echo "JOB 2 - Hello World From ${{env.JOB_LEVEL_2}}"
           echo "STEP_LEVEL_1 - Hello World From ${{env.STEP_LEVEL_1}}"
           echo "STEP_LEVEL_2 - Hello World From ${{env.STEP_LEVEL_2}}"
+
+      - name: Set environment variable
+        shell: bash
+        run: |
+          swmValue=$(echo "hello SWM")
+          echo "SWM_VALUE=$swmValue" >> $GITHUB_ENV
+
+      - name: Get enviroment variable from bash
+        shell: bash
+        # gha | bash | pwsh 변수 불러오는 방법으로 각 변수들을 불러와보기
+        run: |
+          echo "SWM_VALUE_1: ${{env.SWM_VALUE}}"
+          echo "SWM_VALUE_2: $SWM_VALUE"
+          echo "SWM_VALUE_3: $env:SWM_VALUE"
+
+      - name: Get enviroment variable from pwsh
+        shell: pwsh
+        run: |
+          echo "SWM_VALUE_1: ${{env.SWM_VALUE}}"
+          echo "SWM_VALUE_2: $SWM_VALUE"
+          echo "SWM_VALUE_3: $env:SWM_VALUE"
