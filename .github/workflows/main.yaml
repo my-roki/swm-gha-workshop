@@ -3,17 +3,45 @@ name: "SWM Github Actions Basic"
 
 on: push
 
+env:
+  GLOBAL_LEVEL: "This value comes from the GLOBAL level"
+
 jobs:
   # 각 job마다 별개의 서버로 돌립니다. job들 사이에서는 무슨일이 일어나는지 모릅니다.
   first-job:
     name: "First Job"
     runs-on: ubuntu-latest
+    env:
+      JOB_LEVEL_1: "This value comes from the JOB level 1"
     steps:
       # step 하나하나가 한 개의 task
       - name: Say Hello World1
         shell: bash
-        run: echo "Hello World From step1"
+        env:
+          STEP_LEVEL_1: "This value comes from the STEP level 1"
+        run: |
+          echo "Hello World From step1"
+          echo "GLOBAL - Hello World From ${{env.GLOBAL_LEVEL}}"
+          echo "JOB 1 - Hello World From ${{env.JOB_LEVEL_1}}"
+          echo "JOB 2-  Hello World From ${{env.JOB_LEVEL_2}}"
+          echo "STEP_LEVEL_1 - Hello World From ${{env.STEP_LEVEL_1}}"
+          echo "STEP_LEVEL_2-  Hello World From ${{env.STEP_LEVEL_2}}"
 
+  second-job:
+    name: "Second Job"
+    runs-on: ubuntu-latest
+    env:
+      JOB_LEVEL_2: "This value comes from the JOB level 2"
+    steps:
+      # step 하나하나가 한 개의 task
       - name: Say Hello World2
-        shell: pwsh
-        run: echo "Hello World From step2"
+        shell: bash
+        env:
+          STEP_LEVEL_2: "This value comes from the STEP level 2"
+        run: |
+          echo "Hello World From step2"
+          echo "GLOBAL - Hello World From ${{env.GLOBAL_LEVEL}}"
+          echo "JOB 1 - Hello World From ${{env.JOB_LEVEL_1}}"
+          echo "JOB 2 - Hello World From ${{env.JOB_LEVEL_2}}"
+          echo "STEP_LEVEL_1 - Hello World From ${{env.STEP_LEVEL_1}}"
+          echo "STEP_LEVEL_2 - Hello World From ${{env.STEP_LEVEL_2}}"
