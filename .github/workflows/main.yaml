@@ -1,10 +1,23 @@
 name: "SWM GitHub Actions Basic"
 
-on: push
+# on: ["push", "pull-request"]
+on:
+  push:
+    # 특정 브랜치에서 이벤트 발생시 actions 동작
+    branches:
+      - "main"
+    # 특정 디렉토리에서 이벤트 발생시 actions 동작
+    path:
+      - "src/**"
+      - "test/**"
 
 jobs:
   first-job:
     name: "First Job"
+
+  second-job:
+    if: github.event == 'pull_request'
+    name: "Second Job"
 
     strategy:
       matrix:
