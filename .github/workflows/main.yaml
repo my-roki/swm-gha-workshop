@@ -11,58 +11,21 @@ jobs:
   first-job:
     name: "First Job"
     runs-on: ubuntu-latest
-    env:
-      JOB_LEVEL_1: "This value comes from the JOB level 1"
     steps:
       # step 하나하나가 한 개의 task
-      - name: Say Hello World1
-        shell: bash
-        env:
-          STEP_LEVEL_1: "This value comes from the STEP level 1"
-        run: |
-          echo "Hello World From step1"
-          echo "GLOBAL - Hello World From ${{env.GLOBAL_LEVEL}}"
-          echo "JOB 1 - Hello World From ${{env.JOB_LEVEL_1}}"
-          echo "JOB 2-  Hello World From ${{env.JOB_LEVEL_2}}"
-          echo "STEP_LEVEL_1 - Hello World From ${{env.STEP_LEVEL_1}}"
-          echo "STEP_LEVEL_2-  Hello World From ${{env.STEP_LEVEL_2}}"
-
-  second-job:
-    name: "Second Job"
-    runs-on: ubuntu-latest
-    env:
-      JOB_LEVEL_2: "This value comes from the JOB level 2"
-    steps:
-      # step 하나하나가 한 개의 task
-      - name: Say Hello World2
-        shell: bash
-        env:
-          STEP_LEVEL_2: "This value comes from the STEP level 2"
-        run: |
-          echo "Hello World From step2"
-          echo "GLOBAL - Hello World From ${{env.GLOBAL_LEVEL}}"
-          echo "JOB 1 - Hello World From ${{env.JOB_LEVEL_1}}"
-          echo "JOB 2 - Hello World From ${{env.JOB_LEVEL_2}}"
-          echo "STEP_LEVEL_1 - Hello World From ${{env.STEP_LEVEL_1}}"
-          echo "STEP_LEVEL_2 - Hello World From ${{env.STEP_LEVEL_2}}"
-
-      - name: Set environment variable
+      - name: Set output value
+        id: first
         shell: bash
         run: |
-          swmValue=$(echo "hello SWM")
-          echo "SWM_VALUE=$swmValue" >> $GITHUB_ENV
+          swm_value1="This is the value for the first output"
+          swm_value2="This is the value for the second output"
 
-      - name: Get enviroment variable from bash
-        shell: bash
-        # gha | bash | pwsh 변수 불러오는 방법으로 각 변수들을 불러와보기
-        run: |
-          echo "SWM_VALUE_1: ${{env.SWM_VALUE}}"
-          echo "SWM_VALUE_2: $SWM_VALUE"
-          echo "SWM_VALUE_3: $env:SWM_VALUE"
+          echo "::set-output name=swm1::$swm_value1"
+          echo "::set-output name=swm2::$swm_value2"
 
-      - name: Get enviroment variable from pwsh
+      - name: Get output value
         shell: pwsh
         run: |
-          echo "SWM_VALUE_1: ${{env.SWM_VALUE}}"
-          echo "SWM_VALUE_2: $SWM_VALUE"
-          echo "SWM_VALUE_3: $env:SWM_VALUE"
+          echo "Output value1 is: ${{ steps.first.outputs.swm1 }}"
+          echo "Output value2 is: ${{ steps.first.outputs.swm2 }}"
+
